@@ -63,6 +63,9 @@ def main(argv=None):
     p.add_argument("--seed", type=int, default=20260702)
     p.add_argument("--offline", action="store_true",
                    help="don't resolve page counts now (page=None in manifest)")
+    p.add_argument("--source", choices=["openapi", "legacy"], default="openapi",
+                   help="openapi = page counts via IIIF v3 (défaut, hors BnF) ; "
+                        "legacy = Pagination gallica.bnf.fr (réseau BnF)")
     p.add_argument("-o", "--out", default="out/sample.jsonl")
 
     p = sub.add_parser("harvest")
@@ -158,6 +161,8 @@ def main(argv=None):
             rows, alloc,
             client=None if args.offline else client,
             pages_per_doc=args.pages_per_doc, seed=args.seed,
+            page_count_fn=(None if args.offline or args.source == "legacy"
+                           else client.page_count_v3),
         )
         sampling.write_manifest(smp, args.out)
         print(f"{len(smp)} pages -> {args.out}")

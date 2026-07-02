@@ -25,7 +25,7 @@ problème avant de construire la solution.
 
 ## Ce qui est fait
 
-Un toolkit Python (`harvest/`, zéro dépendance hors stdlib, 30 tests) qui :
+Un toolkit Python (`harvest/`, zéro dépendance hors stdlib, 31 tests) qui :
 
 1. **Constitue un inventaire d'ARKs** — deux voies :
    - `inventory-from-dump` : depuis les dumps CSV de métadonnées api.bnf.fr.
@@ -138,6 +138,25 @@ Documents : `PROTOCOLE-PHASE0.md` (règle contrefactuelle, grille, procédure),
 - `inventaire-avec-ocr.csv` = les 97 docs AVEC OCR, enrichis d'`ocr_rate`, triés
   par taux décroissant → base pour l'échantillonnage/scoring à l'échelle.
 
+### Scoring à l'échelle (étape 4) — 199 pages, 3 juil. 2026
+- **Sampler réparé pour openapi** : `draw_sample` prend un `page_count_fn` et la
+  commande `sample` une option `--source openapi|legacy` (défaut openapi). Avant,
+  le mode online n'utilisait que la Pagination legacy (gallica.bnf.fr, Datadome →
+  mort d'ici) ; désormais les nombres de pages viennent du manifest v3. C'est ce
+  qui permet **plusieurs pages par doc** hors réseau BnF.
+- Échantillon : `sample-avec-ocr.jsonl` (199 pages, 5 strates, seed défaut,
+  `--n 200 --floor 8 --pages-per-doc 3` sur `inventaire-avec-ocr.csv`).
+- `seg-score` : **190/199 pages exploitables (95 %)** — vs 9/24 sur le pilote.
+  Quelques pages restent vides malgré un doc "avec OCR" (planches/pages blanches
+  tirées au hasard) : le doc-level ≠ page-level, encore.
+- Complexité moyenne par strate (`out/seg-scores-avec-ocr.csv`) :
+  - imprimé 1450-1600 : **0.200** (cols 2.6, gap 0.43) — les plus complexes
+  - presse 1600-1820 : 0.150 (cols 2.8) · presse 1881-1945 : 0.150 (cols 1.3)
+  - imprimé 1600-1820 : 0.145 (cols 1.6) · presse 1821-1880 : 0.140 (cols 1.4)
+  - Colonnes réalistes (1.3–2.8), presse multi-colonnes, imprimés anciens en tête.
+- ⚠️ Ces chiffres restent **NON calibrés** (poids déclarés, pas validés). C'est
+  l'étape suivante : annoter ~25 pages (feuille HTML) et corréler.
+
 ---
 
 ## Le scoreur de complexité de segmentation (cœur méthodologique)
@@ -185,14 +204,16 @@ corrélation entre `complexity` et le jugement humain, et n'extrapoler qu'ensuit
 2. ✅ **FAIT (autrement)** — `nqa_score` injoignable (Datadome) ; remplacé par
    le « Taux OCR » du manifest openapi via la commande `ocr-probe`. Signal
    qualité gratuit sur les 188 docs, validé croisé avec `has_ocr`.
-3. ⏳ **AMORCÉ** — `inventaire-avec-ocr.csv` produit (97 docs AVEC OCR sur 188,
-   avec leur `ocr_rate`). Reste, pour un vrai signal de segmentation : viser
-   surtout la presse et les monographies récentes (19e–20e), et si besoin
-   élargir l'inventaire au-delà des 188 (l'échantillon reste petit par strate).
-4. **Lancer le scoring à l'échelle** (150–400 pages) et produire la synthèse
-   par strate.
-5. **Calibrer** : annoter ~25 pages avec la feuille HTML, mesurer la
-   corrélation avec `complexity`.
+3. ✅ **FAIT** — `inventaire-avec-ocr.csv` produit (97 docs AVEC OCR sur 188,
+   avec leur `ocr_rate`). Pour élargir : viser presse et monographies récentes
+   (19e–20e), et si besoin dépasser les 188 (l'échantillon reste petit par
+   strate côté imprimés).
+4. ✅ **FAIT** — scoring à l'échelle : `sample-avec-ocr.jsonl` (199 pages),
+   `seg-score` → `out/seg-scores-avec-ocr.csv`, synthèse par strate ci-dessus.
+   190/199 pages exploitables.
+5. ⏭️ **PROCHAINE** — **Calibrer** : annoter ~25 pages avec la feuille HTML
+   (`annotation-sheet sample-avec-ocr.jsonl`), mesurer la corrélation avec
+   `complexity`. Sans ça, les scores restent indicatifs, pas défendables.
 6. **Rédiger la note** de phase 0 (3–4 p.) : couverture OCR par strate,
    décomposition segmentation/reconnaissance, décision sur la nécessité d'une
    brique "segmentation" (phase 4) dans le correcteur.

@@ -16,7 +16,7 @@ import json
 import random
 from collections import defaultdict
 from pathlib import Path
-from typing import Optional
+from typing import Callable, Optional
 
 from .gallica import GallicaClient
 
@@ -58,13 +58,22 @@ def draw_sample(
     client: Optional[GallicaClient] = None,
     pages_per_doc: int = 2,
     seed: int = 20260702,
+    page_count_fn: Optional[Callable[[str], int]] = None,
 ) -> list[dict]:
     """Pick documents per stratum, then pages within documents.
 
-    If a GallicaClient is provided, real page counts are fetched; otherwise
-    page numbers are drawn later (entries get page=None placeholders).
+    If a GallicaClient is provided, real page counts are fetched and several
+    pages may be drawn per document; otherwise page numbers are drawn later
+    (entries get page=None placeholders, one row per document).
+
+    page_count_fn overrides how a document's page count is resolved. Default is
+    `client.page_count` (legacy Pagination on gallica.bnf.fr, Datadome-gated);
+    pass `client.page_count_v3` to resolve via openapi.bnf.fr instead — the only
+    route that works outside the BnF network.
     """
     rng = random.Random(seed)
+    if client is not None and page_count_fn is None:
+        page_count_fn = client.page_count
     by_stratum: dict[str, list[dict]] = defaultdict(list)
     for r in rows:
         by_stratum[r["_stratum"]].append(r)
@@ -81,7 +90,7 @@ def draw_sample(
             pages: list[Optional[int]]
             if client is not None:
                 try:
-                    count = client.page_count(doc["ark"])
+                    count = page_count_fn(doc["ark"])
                     pages = rng.sample(range(1, count + 1), min(take, count))
                 except Exception as e:  # noqa: BLE001 - log and skip document
                     print(f"  ! {doc['ark']}: {e}")

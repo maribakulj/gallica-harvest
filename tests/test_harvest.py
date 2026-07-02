@@ -106,3 +106,32 @@ def test_sampling_allocation_and_draw(tmp_path):
     # Reproducibility
     sample2 = draw_sample(loaded, alloc, client=None, pages_per_doc=2, seed=1)
     assert json.dumps(sample) == json.dumps(sample2)
+
+
+def test_sampling_online_multipage_via_page_count_fn(tmp_path):
+    """With a page-count resolver (e.g. client.page_count_v3 over openapi),
+    several pages are drawn per document — reproducibly, offline in the test."""
+    from harvest.sampling import allocate, draw_sample, load_inventory
+
+    inv = tmp_path / "inv.csv"
+    rows = ["ark,doctype,period"]
+    rows += [f"bpt6kpress{i},presse,1850-1880" for i in range(20)]
+    inv.write_text("\n".join(rows), encoding="utf-8")
+    loaded = load_inventory(inv, ["doctype", "period"])
+    alloc = allocate(loaded, n_pages=30, floor=30)  # one stratum
+
+    # client is only checked for is-not-None; page_count_fn does the resolving.
+    sample = draw_sample(loaded, alloc, client=object(), pages_per_doc=3,
+                         seed=1, page_count_fn=lambda ark: 50)
+    assert len(sample) == 30
+    assert all(1 <= s["page"] <= 50 for s in sample)          # real page ints
+    from collections import Counter
+    per_doc = Counter(s["ark"] for s in sample)
+    assert max(per_doc.values()) == 3                          # up to 3 pages/doc
+    # pages within a doc are distinct (rng.sample, no repeats)
+    for ark in per_doc:
+        pp = [s["page"] for s in sample if s["ark"] == ark]
+        assert len(pp) == len(set(pp))
+    sample2 = draw_sample(loaded, alloc, client=object(), pages_per_doc=3,
+                          seed=1, page_count_fn=lambda ark: 50)
+    assert json.dumps(sample) == json.dumps(sample2)           # reproducible

@@ -12,7 +12,7 @@ Python ≥ 3.10.
 
 ```bash
 pip install pytest            # tests uniquement
-python3 -m pytest tests/ -q   # 30 tests, tout doit passer
+python3 -m pytest tests/ -q   # 31 tests, tout doit passer
 ```
 
 ## Workflow phase 0 — diagnostic
@@ -41,12 +41,15 @@ python3 -m harvest.cli inventory-from-dump dump-monographies.csv \
 
 ```bash
 python3 -m harvest.cli sample inventaire.csv \
-    --strata doctype,period --n 400 --floor 15 --pages-per-doc 2 \
-    --offline -o out/sample.jsonl
+    --strata doctype,period --n 200 --floor 8 --pages-per-doc 3 \
+    --source openapi -o out/sample.jsonl
 ```
 
-   (`--offline` recommandé hors BnF : les numéros de page seront résolus au
-   moissonnage via le manifeste IIIF v3.)
+   Deux façons de résoudre les numéros de page, toutes deux hors réseau BnF :
+   `--source openapi` (défaut) résout les comptes de pages via le manifeste
+   IIIF v3 et permet **plusieurs pages par document** ; `--offline` diffère la
+   résolution au moissonnage (une page/doc, page=None). Éviter `--source
+   legacy` (Pagination gallica.bnf.fr, bloqué par Datadome hors BnF).
 
 3. **Moissonnage** — par défaut via **openapi.bnf.fr** (IIIF Presentation
    v3, non soumis à la protection anti-bot) : texte OCR en AnnotationPages
@@ -197,5 +200,5 @@ harvest/align.py       appariement géométrie+texte, suspects fusion/scission,
 harvest/gt_sources.py  registre des sources GT + récupération d'ARKs
 harvest/sampling.py    échantillonnage stratifié reproductible
 harvest/cli.py         orchestration
-tests/                 fixtures ALTO/PAGE synthétiques + 30 tests
+tests/                 fixtures ALTO/PAGE synthétiques + 31 tests
 ```
