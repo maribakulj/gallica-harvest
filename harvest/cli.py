@@ -119,6 +119,13 @@ def main(argv=None):
     p.add_argument("--title", default="Phase 0 — feuille d'annotation")
     p.add_argument("-o", "--out", default="feuille-annotation.html")
 
+    p = sub.add_parser("calibrate",
+                       help="corréler le score complexity au jugement humain (Spearman)")
+    p.add_argument("annotations", help="CSV exporté de la feuille d'annotation")
+    p.add_argument("scores", help="CSV seg-score (colonne complexity)")
+    p.add_argument("--signal", choices=["seg_count", "gravite"], default="seg_count",
+                   help="signal humain à corréler (défaut: nb de catégories segmentation)")
+
     p = sub.add_parser("stats")
     p.add_argument("triplets")
 
@@ -464,6 +471,29 @@ def main(argv=None):
         rows = [json.loads(l) for l in open(args.manifest, encoding="utf-8")]
         out = generate_sheet(rows, args.out, title=args.title)
         print(f"{len(rows)} pages -> {out}")
+
+    elif args.cmd == "calibrate":
+        from . import calibrate as _cal
+        ann = _cal.load_annotations(args.annotations)
+        scores = _cal.load_scores(args.scores)
+        res = _cal.correlate(ann, scores, signal=args.signal)
+        done = sum(1 for a in ann.values() if a["done"])
+        print(f"annotations : {len(ann)} pages ({done} traitées) | "
+              f"scores : {len(scores)} pages exploitables")
+        print(f"appariées (traitées ∩ scorées, signal '{res['signal']}') : {res['n']}")
+        rho = res["spearman"]
+        if rho is None:
+            print("\nCorrélation de Spearman : indéfinie "
+                  "(n < 2 ou signal/complexité constant — annoter plus de pages).")
+        else:
+            strength = ("forte" if abs(rho) >= 0.6 else
+                        "modérée" if abs(rho) >= 0.4 else "faible")
+            print(f"\nSpearman rho (humain vs complexity) : {rho:+.3f} ({strength}, n={res['n']})")
+            print("Détail (ark f page : humain -> complexity), trié par complexity :")
+            for (ark, page), h, m in sorted(res["pairs"], key=lambda t: t[2]):
+                print(f"  {ark} f{page}: {h:g} -> {m:.3f}")
+            print("\nUn rho positif et élevé légitime l'extrapolation du score aux "
+                  "pages non annotées. Toujours reporter n avec rho.")
 
     elif args.cmd == "stats":
         n = noop = unmatched = suspects = 0

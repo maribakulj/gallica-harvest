@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<title>Phase 0 — calibration (25 pages, annotation à l&#x27;aveugle)</title>
+<style>
+ body { font: 14px/1.45 -apple-system, sans-serif; margin: 2em auto; max-width: 1100px; color:#222; }
+ h1 { font-size: 1.3em; }
+ .toolbar { position: sticky; top:0; background:#fff; padding:.6em 0; border-bottom:1px solid #ddd; z-index:2; }
+ .toolbar button { margin-right:.6em; }
+ .page { border:1px solid #ddd; border-radius:8px; padding:.7em .9em; margin:.8em 0; }
+ .page.done { background:#f3faf3; border-color:#bcd9bc; }
+ .head { display:flex; gap:.7em; align-items:baseline; flex-wrap:wrap; }
+ .num { background:#333; color:#fff; border-radius:1em; padding:0 .55em; font-size:.85em; }
+ .meta { color:#777; font-size:.9em; }
+ .links a { margin-right:.6em; }
+ .cats { margin:.5em 0; display:flex; flex-wrap:wrap; gap:.25em .9em; }
+ .cat { font-size:.92em; white-space:nowrap; }
+ .cat.seg { color:#8a2b2b; } .cat.rec { color:#1f4e79; }
+ .extra { display:flex; gap:.8em; align-items:center; }
+ .extra input[type=text] { flex:1; }
+ #stats { color:#555; font-size:.9em; margin-left:.8em; }
+</style></head><body>
+<h1>Phase 0 — calibration (25 pages, annotation à l&#x27;aveugle)</h1>
+<p>Pour chaque page : ouvrir <b>image</b> et <b>texte OCR</b> côte à côte, appliquer la
+règle contrefactuelle du protocole, cocher les catégories observées
+(<span style="color:#8a2b2b">segmentation</span> /
+<span style="color:#1f4e79">reconnaissance</span>), noter la gravité, cocher « page traitée ».
+Tout est sauvegardé localement dans le navigateur.</p>
+<div class="toolbar">
+  <button onclick="exportCSV()">Exporter CSV</button>
+  <button onclick="if(confirm('Tout effacer ?')) { localStorage.removeItem(KEY); location.reload(); }">Réinitialiser</button>
+  <span id="stats"></span>
+</div>
+
+<div class="page" id="row0">
+  <div class="head">
+    <span class="num">1</span>
+    <code>bpt6k8710026t</code> <b>f232</b>
+    <span class="meta">imprime · 1450-1600 · incunable 15e (Gallicorpora) </span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k8710026t/f232.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k8710026t/f232.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k8710026t/f232.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="0" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="0" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="0" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="0" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="0" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="0" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="0" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="0" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="0" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="0" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="0" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="0" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="0" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="0" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="0" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="0" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row1">
+  <div class="head">
+    <span class="num">2</span>
+    <code>bpt6k1040042m</code> <b>f3</b>
+    <span class="meta">presse · 1600-1820 · Cabinet des modes · 1785</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k1040042m/f3.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k1040042m/f3.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k1040042m/f3.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="1" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="1" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="1" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="1" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="1" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="1" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="1" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="1" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="1" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="1" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="1" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="1" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="1" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="1" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="1" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="1" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row2">
+  <div class="head">
+    <span class="num">3</span>
+    <code>bpt6k10400416</code> <b>f16</b>
+    <span class="meta">presse · 1600-1820 · Cabinet des modes · 1785</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k10400416/f16.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k10400416/f16.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k10400416/f16.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="2" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="2" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="2" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="2" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="2" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="2" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="2" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="2" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="2" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="2" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="2" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="2" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="2" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="2" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="2" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="2" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row3">
+  <div class="head">
+    <span class="num">4</span>
+    <code>bpt6k1041880c</code> <b>f2</b>
+    <span class="meta">presse · 1600-1820 · Journal des dames et des modes · 1805</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k1041880c/f2.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k1041880c/f2.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k1041880c/f2.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="3" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="3" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="3" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="3" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="3" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="3" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="3" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="3" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="3" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="3" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="3" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="3" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="3" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="3" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="3" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="3" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row4">
+  <div class="head">
+    <span class="num">5</span>
+    <code>bpt6k57639026</code> <b>f12</b>
+    <span class="meta">presse · 1881-1945 · Dimanches de la femme (Les) · 1931</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k57639026/f12.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k57639026/f12.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k57639026/f12.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="4" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="4" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="4" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="4" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="4" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="4" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="4" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="4" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="4" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="4" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="4" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="4" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="4" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="4" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="4" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="4" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row5">
+  <div class="head">
+    <span class="num">6</span>
+    <code>bpt6k10409523</code> <b>f2</b>
+    <span class="meta">presse · 1600-1820 · Journal des dames et des modes · 1805</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k10409523/f2.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k10409523/f2.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k10409523/f2.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="5" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="5" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="5" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="5" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="5" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="5" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="5" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="5" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="5" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="5" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="5" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="5" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="5" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="5" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="5" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="5" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row6">
+  <div class="head">
+    <span class="num">7</span>
+    <code>bpt6k5524090d</code> <b>f20</b>
+    <span class="meta">presse · 1881-1945 · Journal de la Jeune fille · 1910</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k5524090d/f20.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k5524090d/f20.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k5524090d/f20.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="6" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="6" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="6" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="6" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="6" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="6" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="6" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="6" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="6" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="6" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="6" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="6" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="6" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="6" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="6" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="6" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row7">
+  <div class="head">
+    <span class="num">8</span>
+    <code>bpt6k431059x</code> <b>f3</b>
+    <span class="meta">presse · 1821-1880 · La Presse · 1848</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k431059x/f3.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k431059x/f3.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k431059x/f3.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="7" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="7" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="7" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="7" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="7" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="7" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="7" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="7" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="7" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="7" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="7" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="7" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="7" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="7" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="7" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="7" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row8">
+  <div class="head">
+    <span class="num">9</span>
+    <code>bpt6k8711906g</code> <b>f62</b>
+    <span class="meta">imprime · 1450-1600 · imprimé 16e (FoNDUE) </span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k8711906g/f62.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k8711906g/f62.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k8711906g/f62.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="8" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="8" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="8" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="8" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="8" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="8" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="8" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="8" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="8" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="8" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="8" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="8" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="8" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="8" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="8" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="8" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row9">
+  <div class="head">
+    <span class="num">10</span>
+    <code>bpt6k1041880c</code> <b>f5</b>
+    <span class="meta">presse · 1600-1820 · Journal des dames et des modes · 1805</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k1041880c/f5.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k1041880c/f5.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k1041880c/f5.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="9" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="9" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="9" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="9" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="9" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="9" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="9" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="9" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="9" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="9" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="9" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="9" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="9" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="9" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="9" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="9" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row10">
+  <div class="head">
+    <span class="num">11</span>
+    <code>bpt6k5763888c</code> <b>f12</b>
+    <span class="meta">presse · 1881-1945 · Dimanches de la femme (Les) · 1931</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k5763888c/f12.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k5763888c/f12.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k5763888c/f12.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="10" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="10" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="10" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="10" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="10" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="10" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="10" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="10" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="10" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="10" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="10" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="10" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="10" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="10" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="10" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="10" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row11">
+  <div class="head">
+    <span class="num">12</span>
+    <code>bpt6k512671f</code> <b>f1</b>
+    <span class="meta">presse · 1821-1880 · La Presse · 1868</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k512671f/f1.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k512671f/f1.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k512671f/f1.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="11" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="11" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="11" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="11" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="11" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="11" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="11" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="11" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="11" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="11" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="11" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="11" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="11" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="11" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="11" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="11" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row12">
+  <div class="head">
+    <span class="num">13</span>
+    <code>bpt6k558126p</code> <b>f3</b>
+    <span class="meta">presse · 1881-1945 · Le Matin · 1900</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k558126p/f3.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k558126p/f3.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k558126p/f3.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="12" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="12" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="12" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="12" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="12" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="12" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="12" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="12" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="12" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="12" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="12" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="12" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="12" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="12" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="12" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="12" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row13">
+  <div class="head">
+    <span class="num">14</span>
+    <code>bpt6k575187s</code> <b>f1</b>
+    <span class="meta">presse · 1881-1945 · Le Matin · 1925</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k575187s/f1.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k575187s/f1.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k575187s/f1.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="13" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="13" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="13" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="13" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="13" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="13" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="13" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="13" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="13" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="13" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="13" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="13" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="13" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="13" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="13" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="13" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row14">
+  <div class="head">
+    <span class="num">15</span>
+    <code>bpt6k8711898c</code> <b>f167</b>
+    <span class="meta">imprime · 1450-1600 · imprimé 16e (Gallicorpora) </span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k8711898c/f167.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k8711898c/f167.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k8711898c/f167.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="14" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="14" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="14" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="14" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="14" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="14" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="14" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="14" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="14" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="14" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="14" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="14" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="14" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="14" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="14" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="14" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row15">
+  <div class="head">
+    <span class="num">16</span>
+    <code>bpt6k57639026</code> <b>f16</b>
+    <span class="meta">presse · 1881-1945 · Dimanches de la femme (Les) · 1931</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k57639026/f16.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k57639026/f16.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k57639026/f16.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="15" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="15" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="15" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="15" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="15" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="15" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="15" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="15" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="15" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="15" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="15" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="15" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="15" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="15" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="15" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="15" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row16">
+  <div class="head">
+    <span class="num">17</span>
+    <code>bpt6k1040954x</code> <b>f3</b>
+    <span class="meta">presse · 1600-1820 · Journal des dames et des modes · 1805</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k1040954x/f3.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k1040954x/f3.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k1040954x/f3.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="16" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="16" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="16" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="16" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="16" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="16" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="16" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="16" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="16" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="16" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="16" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="16" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="16" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="16" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="16" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="16" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row17">
+  <div class="head">
+    <span class="num">18</span>
+    <code>bpt6k5832404d</code> <b>f1</b>
+    <span class="meta">presse · 1821-1880 · Papillon (Le) · 1833</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k5832404d/f1.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k5832404d/f1.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k5832404d/f1.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="17" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="17" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="17" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="17" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="17" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="17" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="17" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="17" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="17" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="17" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="17" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="17" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="17" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="17" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="17" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="17" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row18">
+  <div class="head">
+    <span class="num">19</span>
+    <code>bpt6k6703124k</code> <b>f1</b>
+    <span class="meta">presse · 1881-1945 · La Fronde · 1897</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k6703124k/f1.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k6703124k/f1.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k6703124k/f1.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="18" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="18" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="18" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="18" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="18" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="18" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="18" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="18" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="18" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="18" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="18" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="18" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="18" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="18" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="18" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="18" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row19">
+  <div class="head">
+    <span class="num">20</span>
+    <code>bpt6k9362275</code> <b>f146</b>
+    <span class="meta">presse · 1881-1945 · Vogue · 1928</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k9362275/f146.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k9362275/f146.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k9362275/f146.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="19" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="19" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="19" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="19" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="19" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="19" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="19" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="19" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="19" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="19" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="19" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="19" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="19" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="19" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="19" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="19" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row20">
+  <div class="head">
+    <span class="num">21</span>
+    <code>bpt6k3041989v</code> <b>f341</b>
+    <span class="meta">imprime · 1450-1600 · imprimé 16e (Gallicorpora) </span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k3041989v/f341.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k3041989v/f341.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k3041989v/f341.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="20" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="20" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="20" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="20" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="20" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="20" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="20" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="20" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="20" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="20" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="20" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="20" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="20" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="20" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="20" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="20" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row21">
+  <div class="head">
+    <span class="num">22</span>
+    <code>bpt6k5583193</code> <b>f6</b>
+    <span class="meta">presse · 1881-1945 · Le Matin · 1900</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k5583193/f6.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k5583193/f6.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k5583193/f6.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="21" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="21" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="21" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="21" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="21" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="21" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="21" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="21" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="21" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="21" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="21" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="21" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="21" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="21" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="21" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="21" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row22">
+  <div class="head">
+    <span class="num">23</span>
+    <code>bpt6k5749522</code> <b>f4</b>
+    <span class="meta">presse · 1881-1945 · Le Matin · 1925</span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k5749522/f4.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k5749522/f4.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k5749522/f4.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="22" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="22" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="22" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="22" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="22" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="22" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="22" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="22" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="22" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="22" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="22" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="22" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="22" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="22" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="22" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="22" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row23">
+  <div class="head">
+    <span class="num">24</span>
+    <code>bpt6k6424218b</code> <b>f136</b>
+    <span class="meta">imprime · 1600-1820 · imprimé 17e (Gallicorpora) </span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k6424218b/f136.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k6424218b/f136.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k6424218b/f136.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="23" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="23" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="23" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="23" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="23" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="23" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="23" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="23" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="23" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="23" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="23" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="23" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="23" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="23" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="23" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="23" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<div class="page" id="row24">
+  <div class="head">
+    <span class="num">25</span>
+    <code>bpt6k56119308</code> <b>f2</b>
+    <span class="meta">imprime · 1600-1820 · imprimé 17e (Gallicorpora) </span>
+    <span class="links">
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k56119308/f2.item" target="_blank">image</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k56119308/f2.zoom" target="_blank">zoom</a>
+      <a href="https://gallica.bnf.fr/ark:/12148/bpt6k56119308/f2.texteBrut" target="_blank">texte OCR</a>
+    </span>
+  </div>
+  <div class="cats"><label class="cat seg"><input type="checkbox" data-row="24" data-cat="seg_fusion">Fusion de lignes</label><label class="cat seg"><input type="checkbox" data-row="24" data-cat="seg_scission">Scission de ligne</label><label class="cat seg"><input type="checkbox" data-row="24" data-cat="seg_colonnes">Contamination inter-colonnes</label><label class="cat seg"><input type="checkbox" data-row="24" data-cat="seg_ordre">Ordre de lecture erroné</label><label class="cat seg"><input type="checkbox" data-row="24" data-cat="seg_zone_manquee">Zone manquée</label><label class="cat seg"><input type="checkbox" data-row="24" data-cat="seg_typage_bloc">Mauvais typage de bloc</label><label class="cat rec"><input type="checkbox" data-row="24" data-cat="rec_substitution">Substitutions de caractères</label><label class="cat rec"><input type="checkbox" data-row="24" data-cat="rec_diacritiques">Diacritiques</label><label class="cat rec"><input type="checkbox" data-row="24" data-cat="rec_ligatures">Ligatures / s long</label><label class="cat rec"><input type="checkbox" data-row="24" data-cat="rec_casse">Casse</label><label class="cat rec"><input type="checkbox" data-row="24" data-cat="rec_ponctuation">Ponctuation</label><label class="cat rec"><input type="checkbox" data-row="24" data-cat="rec_mots">Segmentation en mots (intra-ligne)</label><label class="cat indecidable"><input type="checkbox" data-row="24" data-cat="indecidable">Indécidable</label></div>
+  <div class="extra">
+    <select data-row="24" data-cat="_gravite">
+      <option value="">— gravité globale —</option>
+      <option value="ras">RAS / négligeable</option>
+      <option value="mineure">Erreurs mineures</option>
+      <option value="notable">Erreurs notables</option>
+      <option value="severe">Page inutilisable</option>
+    </select>
+    <input type="text" data-row="24" data-cat="_note" placeholder="notes libres"/>
+    <label><input type="checkbox" data-row="24" data-cat="_fait"> page traitée</label>
+  </div>
+</div>
+<script>
+const ROWS = [{"ark": "bpt6k8710026t", "page": 232, "doctype": "imprime", "period": "1450-1600", "title": "incunable 15e (Gallicorpora)", "source": "Gallicorpora/HTR-incunable-15e-siecle"}, {"ark": "bpt6k1040042m", "page": 3, "doctype": "presse", "period": "1600-1820", "title": "Cabinet des modes", "source": "altomator-collections"}, {"ark": "bpt6k10400416", "page": 16, "doctype": "presse", "period": "1600-1820", "title": "Cabinet des modes", "source": "altomator-collections"}, {"ark": "bpt6k1041880c", "page": 2, "doctype": "presse", "period": "1600-1820", "title": "Journal des dames et des modes", "source": "altomator-collections"}, {"ark": "bpt6k57639026", "page": 12, "doctype": "presse", "period": "1881-1945", "title": "Dimanches de la femme (Les)", "source": "altomator-collections"}, {"ark": "bpt6k10409523", "page": 2, "doctype": "presse", "period": "1600-1820", "title": "Journal des dames et des modes", "source": "altomator-collections"}, {"ark": "bpt6k5524090d", "page": 20, "doctype": "presse", "period": "1881-1945", "title": "Journal de la Jeune fille", "source": "altomator-collections"}, {"ark": "bpt6k431059x", "page": 3, "doctype": "presse", "period": "1821-1880", "title": "La Presse", "source": "altomator-collections"}, {"ark": "bpt6k8711906g", "page": 62, "doctype": "imprime", "period": "1450-1600", "title": "imprimé 16e (FoNDUE)", "source": "FoNDUE-HTR/FONDUE-FR-PRINT-16"}, {"ark": "bpt6k1041880c", "page": 5, "doctype": "presse", "period": "1600-1820", "title": "Journal des dames et des modes", "source": "altomator-collections"}, {"ark": "bpt6k5763888c", "page": 12, "doctype": "presse", "period": "1881-1945", "title": "Dimanches de la femme (Les)", "source": "altomator-collections"}, {"ark": "bpt6k512671f", "page": 1, "doctype": "presse", "period": "1821-1880", "title": "La Presse", "source": "altomator-collections"}, {"ark": "bpt6k558126p", "page": 3, "doctype": "presse", "period": "1881-1945", "title": "Le Matin", "source": "altomator-collections"}, {"ark": "bpt6k575187s", "page": 1, "doctype": "presse", "period": "1881-1945", "title": "Le Matin", "source": "altomator-collections"}, {"ark": "bpt6k8711898c", "page": 167, "doctype": "imprime", "period": "1450-1600", "title": "imprimé 16e (Gallicorpora)", "source": "Gallicorpora/HTR-imprime-16e-siecle"}, {"ark": "bpt6k57639026", "page": 16, "doctype": "presse", "period": "1881-1945", "title": "Dimanches de la femme (Les)", "source": "altomator-collections"}, {"ark": "bpt6k1040954x", "page": 3, "doctype": "presse", "period": "1600-1820", "title": "Journal des dames et des modes", "source": "altomator-collections"}, {"ark": "bpt6k5832404d", "page": 1, "doctype": "presse", "period": "1821-1880", "title": "Papillon (Le)", "source": "altomator-collections"}, {"ark": "bpt6k6703124k", "page": 1, "doctype": "presse", "period": "1881-1945", "title": "La Fronde", "source": "altomator-collections"}, {"ark": "bpt6k9362275", "page": 146, "doctype": "presse", "period": "1881-1945", "title": "Vogue", "source": "altomator-collections"}, {"ark": "bpt6k3041989v", "page": 341, "doctype": "imprime", "period": "1450-1600", "title": "imprimé 16e (Gallicorpora)", "source": "Gallicorpora/HTR-imprime-16e-siecle"}, {"ark": "bpt6k5583193", "page": 6, "doctype": "presse", "period": "1881-1945", "title": "Le Matin", "source": "altomator-collections"}, {"ark": "bpt6k5749522", "page": 4, "doctype": "presse", "period": "1881-1945", "title": "Le Matin", "source": "altomator-collections"}, {"ark": "bpt6k6424218b", "page": 136, "doctype": "imprime", "period": "1600-1820", "title": "imprimé 17e (Gallicorpora)", "source": "Gallicorpora/HTR-imprime-17e-siecle"}, {"ark": "bpt6k56119308", "page": 2, "doctype": "imprime", "period": "1600-1820", "title": "imprimé 17e (Gallicorpora)", "source": "Gallicorpora/HTR-imprime-17e-siecle"}];
+const CATS = ["seg_fusion", "seg_scission", "seg_colonnes", "seg_ordre", "seg_zone_manquee", "seg_typage_bloc", "rec_substitution", "rec_diacritiques", "rec_ligatures", "rec_casse", "rec_ponctuation", "rec_mots", "indecidable", "_gravite", "_note", "_fait"];
+const KEY = "phase0-annotations-v1";
+let state = JSON.parse(localStorage.getItem(KEY) || "{}");
+
+function save() { localStorage.setItem(KEY, JSON.stringify(state)); refresh(); }
+function refresh() {
+  let done = 0;
+  ROWS.forEach((r, i) => {
+    const s = state[i] || {};
+    const el = document.getElementById("row"+i);
+    if (s._fait) { el.classList.add("done"); done++; } else el.classList.remove("done");
+  });
+  document.getElementById("stats").textContent = done + " / " + ROWS.length + " pages traitées";
+}
+document.querySelectorAll("input[type=checkbox],select,input[type=text]").forEach(el => {
+  const i = el.dataset.row, cat = el.dataset.cat;
+  if (i === undefined) return;
+  const s = state[i] || {};
+  if (el.type === "checkbox") el.checked = !!s[cat];
+  else el.value = s[cat] || "";
+  const ev = el.type === "text" ? "input" : "change";
+  el.addEventListener(ev, () => {
+    state[i] = state[i] || {};
+    state[i][cat] = el.type === "checkbox" ? el.checked : el.value;
+    save();
+  });
+});
+function exportCSV() {
+  const cols = ["ark","page","doctype","period","title","source"].concat(CATS);
+  const lines = [cols.join(";")];
+  ROWS.forEach((r, i) => {
+    const s = state[i] || {};
+    const vals = [r.ark, r.page ?? "", r.doctype ?? "", r.period ?? "",
+                  (r.title||"").replaceAll(";",","), r.source ?? ""]
+      .concat(CATS.map(c => {
+        const v = s[c];
+        if (v === true) return "1";
+        if (v === false || v === undefined) return "";
+        return String(v).replaceAll(";",",");
+      }));
+    lines.push(vals.join(";"));
+  });
+  const blob = new Blob(["\ufeff" + lines.join("\n")], {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "phase0-annotations.csv";
+  a.click();
+}
+refresh();
+</script>
+</body></html>

@@ -25,7 +25,7 @@ problème avant de construire la solution.
 
 ## Ce qui est fait
 
-Un toolkit Python (`harvest/`, zéro dépendance hors stdlib, 31 tests) qui :
+Un toolkit Python (`harvest/`, zéro dépendance hors stdlib, 35 tests) qui :
 
 1. **Constitue un inventaire d'ARKs** — deux voies :
    - `inventory-from-dump` : depuis les dumps CSV de métadonnées api.bnf.fr.
@@ -211,9 +211,21 @@ corrélation entre `complexity` et le jugement humain, et n'extrapoler qu'ensuit
 4. ✅ **FAIT** — scoring à l'échelle : `sample-avec-ocr.jsonl` (199 pages),
    `seg-score` → `out/seg-scores-avec-ocr.csv`, synthèse par strate ci-dessus.
    190/199 pages exploitables.
-5. ⏭️ **PROCHAINE** — **Calibrer** : annoter ~25 pages avec la feuille HTML
-   (`annotation-sheet sample-avec-ocr.jsonl`), mesurer la corrélation avec
-   `complexity`. Sans ça, les scores restent indicatifs, pas défendables.
+5. 🟡 **OUTILLÉ, EN ATTENTE D'ANNOTATION HUMAINE** — calibration :
+   - Sous-ensemble `sample-calibration.jsonl` : **25 pages étalées sur toute la
+     plage de complexité** (0.103→0.306, échantillonnage systématique sur la
+     liste triée), toutes strates, **mélangées (seed 20260703)** pour annotation
+     à l'aveugle.
+   - Feuille `feuille-calibration.html` générée → à annoter dans le navigateur
+     (cocher les catégories segmentation/reconnaissance, gravité), puis
+     « Exporter CSV ».
+   - Nouvelle commande **`calibrate <annotations.csv> <seg-scores.csv>`** :
+     joint sur (ark, page), calcule **Spearman rho** entre le signal humain
+     (`seg_count` = nb de catégories segmentation cochées, ou `--signal gravite`)
+     et `complexity`. Stdlib pure (module `harvest/calibrate.py`).
+   - **Action MarceL** : annoter les 25 pages, exporter le CSV, puis lancer
+     `python3 -m harvest.cli calibrate phase0-annotations.csv
+     out/seg-scores-avec-ocr.csv`. Un rho positif/élevé légitime l'extrapolation.
 6. **Rédiger la note** de phase 0 (3–4 p.) : couverture OCR par strate,
    décomposition segmentation/reconnaissance, décision sur la nécessité d'une
    brique "segmentation" (phase 4) dans le correcteur.

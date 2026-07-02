@@ -12,7 +12,7 @@ Python ≥ 3.10.
 
 ```bash
 pip install pytest            # tests uniquement
-python3 -m pytest tests/ -q   # 31 tests, tout doit passer
+python3 -m pytest tests/ -q   # 35 tests, tout doit passer
 ```
 
 ## Workflow phase 0 — diagnostic
@@ -112,11 +112,20 @@ Produit un CSV par page + une synthèse par strate. Complexité élevée =
 segmentation probablement dominante dans l'erreur.
 
 **Calibration (indispensable pour la fiabilité).** Le score brut ne dit pas
-s'il sur- ou sous-estime. Annoter ~25 pages à la main (la feuille HTML),
-vérifier la corrélation entre `complexity` et le jugement humain, et n'ex-
-trapoler aux centaines de pages qu'une fois cette corrélation établie (avec
-IC). C'est ce qui transforme l'indicateur automatique en estimation
-défendable — et la corrélation elle-même est un résultat à publier.
+s'il sur- ou sous-estime. Annoter ~25 pages à la main, vérifier la corrélation
+entre `complexity` et le jugement humain, et n'extrapoler aux centaines de pages
+qu'une fois cette corrélation établie. La corrélation elle-même est un résultat
+à publier. Boucle outillée :
+
+```bash
+# 1. feuille d'annotation sur un sous-ensemble étalé sur la plage de complexité
+python3 -m harvest.cli annotation-sheet sample-calibration.jsonl \
+    -o feuille-calibration.html
+# 2. annoter dans le navigateur, cliquer « Exporter CSV » -> phase0-annotations.csv
+# 3. corréler le jugement humain au score (Spearman, stdlib)
+python3 -m harvest.cli calibrate phase0-annotations.csv out/seg-scores.csv
+#    --signal seg_count (défaut, nb de catégories segmentation) | gravite
+```
 
 **Limite honnête.** Ceci mesure la *segmentation* sans GT. Le partage exact
 segmentation/reconnaissance *en caractères* sur la part reconnaissance exige
@@ -200,5 +209,5 @@ harvest/align.py       appariement géométrie+texte, suspects fusion/scission,
 harvest/gt_sources.py  registre des sources GT + récupération d'ARKs
 harvest/sampling.py    échantillonnage stratifié reproductible
 harvest/cli.py         orchestration
-tests/                 fixtures ALTO/PAGE synthétiques + 31 tests
+tests/                 fixtures ALTO/PAGE synthétiques + 35 tests
 ```
