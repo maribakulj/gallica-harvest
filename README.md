@@ -12,7 +12,7 @@ Python ≥ 3.10.
 
 ```bash
 pip install pytest            # tests uniquement
-python3 -m pytest tests/ -q   # 15 tests, tout doit passer
+python3 -m pytest tests/ -q   # 30 tests, tout doit passer
 ```
 
 ## Workflow phase 0 — diagnostic
@@ -197,5 +197,5 @@ harvest/align.py       appariement géométrie+texte, suspects fusion/scission,
 harvest/gt_sources.py  registre des sources GT + récupération d'ARKs
 harvest/sampling.py    échantillonnage stratifié reproductible
 harvest/cli.py         orchestration
-tests/                 fixtures ALTO/PAGE synthétiques + 7 tests
+tests/                 fixtures ALTO/PAGE synthétiques + 30 tests
 ```
