@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v3#">
+  <Layout>
+    <Page ID="PAG_3" WIDTH="2000" HEIGHT="3000">
+      <PrintSpace>
+        <TextBlock ID="TB_1">
+          <TextLine ID="TL_1" HPOS="100" VPOS="200" WIDTH="1200" HEIGHT="40">
+            <String CONTENT="Le" WC="0.98"/><SP/>
+            <String CONTENT="gouvernernent" WC="0.61"/><SP/>
+            <String CONTENT="a" WC="0.99"/><SP/>
+            <String CONTENT="décidé" WC="0.87"/>
+          </TextLine>
+          <TextLine ID="TL_2" HPOS="100" VPOS="250" WIDTH="1200" HEIGHT="90">
+            <String CONTENT="de" WC="0.99"/><SP/>
+            <String CONTENT="convoquer" WC="0.95"/><SP/>
+            <String CONTENT="les" WC="0.99"/><SP/>
+            <String CONTENT="charnbres" WC="0.55"/><SP/>
+            <String CONTENT="pour" WC="0.97"/><SP/>
+            <String CONTENT="le" WC="0.99"/><SP/>
+            <String CONTENT="15" WC="0.96"/>
+          </TextLine>
+        </TextBlock>
+      </PrintSpace>
+    </Page>
+  </Layout>
+</alto>

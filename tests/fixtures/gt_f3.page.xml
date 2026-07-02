@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PcGts xmlns="http://schema.primaresearch.org/PAGE/gts/pagecontent/2013-07-15">
+  <Page imageFilename="ark_12148_bpt6ktest_f3.jpg" imageWidth="2000" imageHeight="3000">
+    <TextRegion id="r1">
+      <TextLine id="gt_l1">
+        <Coords points="100,200 1300,200 1300,240 100,240"/>
+        <TextEquiv><Unicode>Le gouvernement a décidé</Unicode></TextEquiv>
+      </TextLine>
+      <TextLine id="gt_l2">
+        <Coords points="100,250 1300,250 1300,290 100,290"/>
+        <TextEquiv><Unicode>de convoquer les chambres</Unicode></TextEquiv>
+      </TextLine>
+      <TextLine id="gt_l3">
+        <Coords points="100,300 1300,300 1300,340 100,340"/>
+        <TextEquiv><Unicode>pour le 15</Unicode></TextEquiv>
+      </TextLine>
+    </TextRegion>
+    <TextRegion id="r2">
+      <TextLine id="gt_marginal">
+        <Coords points="1500,2800 1900,2800 1900,2840 1500,2840"/>
+        <TextEquiv><Unicode>Feuilleton du jour</Unicode></TextEquiv>
+      </TextLine>
+    </TextRegion>
+  </Page>
+</PcGts>

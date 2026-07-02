@@ -1,0 +1,12 @@
+# HTTP cache and generated outputs (reproducible from the toolkit)
+cache/
+out/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Tooling / editor
+.claude/
+.DS_Store
