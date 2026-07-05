@@ -1,6 +1,8 @@
 # HTTP cache and generated outputs (reproducible from the toolkit)
 cache/
 out/
+# Cloned ground-truth corpora (regenerable via `gt-fetch`)
+gt/
 
 # Python
 __pycache__/
