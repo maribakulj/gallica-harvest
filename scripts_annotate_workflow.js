@@ -34,8 +34,9 @@ function prompt(it) {
   const verdict = it.img.replace(/\.jpg$/, ".verdict.json")
   return [
     "Tu es annotateur pour un diagnostic OCR (phase 0, Gallica). Tu juges UNE page en comparant son image à l'OCR de production.",
-    `Lis avec l'outil Read l'image : ${it.img}`,
-    `Lis avec l'outil Read le flux OCR (tokens en ordre de lecture) : ${it.ocr}`,
+    "MÉTHODE IMPÉRATIVE : utilise UNIQUEMENT l'outil Read (pour l'image puis pour le texte), puis l'outil Write. N'utilise JAMAIS Bash ni aucune commande shell. Fais UNE SEULE passe d'analyse : lis l'image une fois, lis l'OCR une fois, juge, écris. Ne relis pas les fichiers, ne boucle pas.",
+    `Lis avec Read l'image : ${it.img}`,
+    `Lis avec Read le flux OCR : ${it.ocr}  (ce peut être une seule très longue ligne — c'est NORMAL, lis-la telle quelle ; elle peut finir par […TRONQUÉ], ignore ce marqueur).`,
     "",
     RULE,
     "",
