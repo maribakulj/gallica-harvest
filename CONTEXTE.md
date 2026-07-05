@@ -211,7 +211,35 @@ corrélation entre `complexity` et le jugement humain, et n'extrapoler qu'ensuit
 4. ✅ **FAIT** — scoring à l'échelle : `sample-avec-ocr.jsonl` (199 pages),
    `seg-score` → `out/seg-scores-avec-ocr.csv`, synthèse par strate ci-dessus.
    190/199 pages exploitables.
-5. 🟡 **OUTILLÉ, EN ATTENTE D'ANNOTATION HUMAINE** — calibration :
+5. 🟢 **PILOTE VISION FAIT (5 juil. 2026), à confirmer à l'échelle** — calibration :
+   - **Déblocage réseau** : `openapi.bnf.fr` ajouté à l'allowlist egress de
+     l'environnement (Custom domains). Conséquence majeure : le bac à sable
+     atteint désormais openapi en direct (images IIIF + OCR + manifest), et
+     Claude peut **lire les pixels d'une page** (`curl` image → outil Read).
+     L'annotation « pleine vision » ne dépend donc plus d'un humain ni du MCP.
+     `gallica.bnf.fr` reste bloqué (Datadome) — sans importance, tout passe par
+     openapi. ⚠️ Garder openapi dans l'allowlist (policy relue au démarrage).
+   - **Pilote 13 pages** (`sample-calib-pilot.jsonl`, 5 strates) : chaque page
+     annotée à l'aveugle par un sous-agent vision (image+OCR, règle
+     contrefactuelle) → `phase0-annotations-pilot.csv` ; corrélé au score
+     géométrique (`out/seg-calib-pilot.csv`) via `calibrate`.
+   - **Résultats** : Spearman rho = **+0.06** (seg_count) / **+0.45** (gravité),
+     n=13 → illustratif, PAS significatif. Le score géométrique traque mal la
+     segmentation (et `n_columns` est faux : page 7 colonnes notée cols=1).
+   - **Surprise (bouscule l'intuition « presse multicolonne = segmentation »)** :
+     les pages les plus colonnées (7, 6, 3, 2 col.) sont jugées PROPRES sur
+     l'ordre de lecture — l'OCR gère bien les colonnes. L'erreur résiduelle y
+     est de la **reconnaissance** (petit corps, italiques, accents). Quand la
+     segmentation apparaît (6/13 pages), c'est un AUTRE mode : **zones manquées**
+     (titres décoratifs, blocs pub) et micro-désordres, sur presse ET
+     monographies. Le plus gros cas seg (60 %) est sur une **monographie**
+     mono-colonne (note de bas de page à 2 col. entremêlée). Part segmentation
+     moyenne déclarée ~14 %. → une éventuelle brique phase 4 servirait la
+     **complétude des zones**, pas le démêlage de colonnes.
+   - **À faire** : monter à ~50 pages (rho crédible) ; spot-check humain de 5-6
+     pages (accord humain↔vision) ; réparer `n_columns` ou remplacer le signal
+     segmentation par le jugement vision directement.
+   - Ancien plan (annotation humaine via feuille HTML), toujours valable :
    - Sous-ensemble `sample-calibration.jsonl` : **25 pages étalées sur toute la
      plage de complexité** (0.103→0.306, échantillonnage systématique sur la
      liste triée), toutes strates, **mélangées (seed 20260703)** pour annotation
