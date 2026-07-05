@@ -4,7 +4,16 @@ export const meta = {
   phases: [{ title: 'Annotate', detail: 'one Sonnet agent per page writes a verdict JSON' }],
 }
 
-const items = Array.isArray(args) ? args : []
+let a = args
+if (typeof a === "string") { try { a = JSON.parse(a) } catch (e) { a = {} } }
+const base = (a && a.base) || ""
+const items = Array.isArray(a)
+  ? a
+  : ((a && a.pages) || []).map(([ark, page]) => ({
+      ark, page,
+      img: `${base}/${ark}_f${page}.jpg`,
+      ocr: `${base}/${ark}_f${page}.ocr.txt`,
+    }))
 log(`Annotation vision de ${items.length} pages (Sonnet, à l'aveugle)`)
 
 const RULE = [
