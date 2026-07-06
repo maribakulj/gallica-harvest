@@ -1,7 +1,6 @@
 # gallica-harvest
 
-Outillage de moissonnage et d'alignement pour le diagnostic phase 0
-(segmentation vs reconnaissance) et la constitution des triplets
+Outillage de moissonnage et d'alignement pour le diagnostic de segmentation vs reconnaissance et la constitution des triplets
 (crop image, hypothèse OCR de production, vérité terrain) pour la
 post-correction OCR.
 
