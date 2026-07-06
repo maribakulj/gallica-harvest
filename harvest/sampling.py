@@ -68,8 +68,8 @@ def draw_sample(
 
     page_count_fn overrides how a document's page count is resolved. Default is
     `client.page_count` (legacy Pagination on gallica.bnf.fr, Datadome-gated);
-    pass `client.page_count_v3` to resolve via openapi.bnf.fr instead — the only
-    route that works outside the BnF network.
+    pass `client.page_count_v3` to resolve via the IIIF v3 gateway instead — the
+    only route that works outside the BnF network.
     """
     rng = random.Random(seed)
     if client is not None and page_count_fn is None:

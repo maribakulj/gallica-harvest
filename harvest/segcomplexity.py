@@ -2,8 +2,8 @@
 
 The premise (see project notes): recognition errors need ground truth to be
 detected, but *segmentation* errors leave intrinsic geometric and statistical
-signatures in the word-token stream that OpenAPI serves — no transcription
-required. This module computes those signatures per page.
+signatures in the word-token stream that the IIIF gateway serves — no
+transcription required. This module computes those signatures per page.
 
 None of the metrics below inspect the *content* of a token; they use only its
 bounding box and its position in the served stream. They are therefore

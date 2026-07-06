@@ -42,17 +42,18 @@ python3 -m harvest.cli inventory-from-dump dump-monographies.csv \
 ```bash
 python3 -m harvest.cli sample inventaire.csv \
     --strata doctype,period --n 200 --floor 8 --pages-per-doc 3 \
-    --source openapi -o out/sample.jsonl
+    --source iiif -o out/sample.jsonl
 ```
 
    Deux façons de résoudre les numéros de page, toutes deux hors réseau BnF :
-   `--source openapi` (défaut) résout les comptes de pages via le manifeste
+   `--source iiif` (défaut) résout les comptes de pages via le manifeste
    IIIF v3 et permet **plusieurs pages par document** ; `--offline` diffère la
    résolution au moissonnage (une page/doc, page=None). Éviter `--source
    legacy` (Pagination gallica.bnf.fr, bloqué par Datadome hors BnF).
 
-3. **Moissonnage** — par défaut via **openapi.bnf.fr** (IIIF Presentation
-   v3, non soumis à la protection anti-bot) : texte OCR en AnnotationPages
+3. **Moissonnage** — par défaut via l'**API IIIF de la BnF** (IIIF Presentation
+   v3, non soumise à la protection anti-bot ; hôte configurable via
+   `GALLICA_IIIF_BASE`) : texte OCR en AnnotationPages
    `supplementing`, images via les services Image du manifeste :
 
 ```bash
@@ -89,7 +90,7 @@ diagnostic de segmentation.
 
 Les erreurs de reconnaissance exigent une vérité terrain pour être détectées ;
 les erreurs de **segmentation**, non — elles laissent des signatures
-géométriques intrinsèques dans les annotations mot-à-mot d'OpenAPI. Le module
+géométriques intrinsèques dans les annotations IIIF mot-à-mot. Le module
 `segcomplexity` les calcule par page, sur 100 % des pages, sans aucun modèle :
 
 - `flow_disorder` : taux de transitions du flux violant l'ordre de lecture
@@ -133,7 +134,7 @@ de la vérité terrain (phase 1, corpus alignés). Aucun miracle possible là-de
 
 ## Signal de disponibilité/qualité OCR (document-level)
 
-Le manifest IIIF openapi expose un champ **« Taux OCR »** par document (le
+Le manifest IIIF de la BnF expose un champ **« Taux OCR »** par document (le
 `nqa_score` officiel de l'OAIRecord étant, lui, bloqué par Datadome). Sa
 présence vaut flag « OCR disponible », sa valeur est le taux OCR BnF.
 
@@ -146,19 +147,19 @@ Accepte un `.csv` (inventaire) ou un `.jsonl` (sample). Produit
 disponibilité OCR par strate. Filtrer `has_ocr=True` donne un inventaire ciblé
 « AVEC OCR », pour que le scoring ne soit pas dominé par des pages vides.
 
-⚠️ openapi rate-limite les rafales (HTTP 429) ; le client réessaie avec backoff,
+⚠️ l'API IIIF rate-limite les rafales (HTTP 429) ; le client réessaie avec backoff,
 mais lancer les gros lots avec `--delay 2`. ⚠️ Le taux est *document-level* :
 une page précise peut être creuse même si le doc affiche 90 %.
 
-## Note importante : granularité des annotations OpenAPI
+## Note importante : granularité des annotations IIIF
 
-L'endpoint `supplementing` d'openapi.bnf.fr sert le texte OCR **au mot**
+L'endpoint `supplementing` de l'API IIIF sert le texte OCR **au mot**
 (une annotation = un token, avec sa boîte `xywh`), pas à la ligne. Le
 toolkit reconstruit les lignes géométriquement via
 `iiif3.group_tokens_into_lines` (clustering par bande verticale + découpe
 sur les gouttières inter-colonnes), sans se fier à l'ordre des items —
 condition nécessaire pour pouvoir *diagnostiquer* les erreurs d'ordre de
-lecture. La commande `triplets --source openapi` applique ce regroupement
+lecture. La commande `triplets --source iiif` applique ce regroupement
 automatiquement avant l'alignement.
 
 Pour inspecter la reconstruction sur une page réelle avant de lancer en

@@ -39,7 +39,7 @@ Un toolkit Python (`harvest/`, zéro dépendance hors stdlib, 35 tests) qui :
    reproductible (seed). Fichiers `sample-pilote.jsonl` (24) et
    `sample-principal.jsonl` (149) déjà générés.
 
-3. **Moissonne** (`harvest`) le texte OCR + images via l'API OpenAPI
+3. **Moissonne** (`harvest`) le texte OCR + images via l'API IIIF de la BnF
    (IIIF Presentation v3).
 
 4. **Score la complexité de segmentation SANS vérité terrain**
@@ -72,14 +72,15 @@ Documents : `PROTOCOLE-PHASE0.md` (règle contrefactuelle, grille, procédure),
   exige un cookie de session issu d'un vrai navigateur, hors de portée d'urllib.
   Donc **OAIRecord (et donc `nqa_score`) n'est joignable par AUCUNE route
   programmatique testée.**
-- Le patch `USER_AGENT` dans `harvest/gallica.py` reste utile pour `openapi.
-  bnf.fr` (poli), mais n'ouvre pas Datadome. ⚠️ Le RE-APPLIQUER si code réextrait.
-- **Conséquence** : on travaille exclusivement via `openapi.bnf.fr`, qui n'est
-  PAS derrière Datadome (voir section suivante).
+- Le patch `USER_AGENT` dans `harvest/gallica.py` reste utile pour l'API IIIF
+  (poli), mais n'ouvre pas Datadome. ⚠️ Le RE-APPLIQUER si code réextrait.
+- **Conséquence** : on travaille exclusivement via l'**API IIIF de la BnF**, qui
+  n'est PAS derrière Datadome (voir section suivante).
 
-### API à utiliser : OpenAPI (openapi.bnf.fr), pas les endpoints legacy
-- `openapi.bnf.fr` (IIIF Presentation v3) N'EST PAS derrière Datadome et
-  fonctionne depuis cette machine avec le bon User-Agent.
+### API à utiliser : l'API IIIF de la BnF, pas les endpoints legacy
+- L'**API IIIF Presentation v3** de la BnF N'EST PAS derrière Datadome et
+  fonctionne depuis cette machine avec le bon User-Agent. L'hôte concret est
+  configurable via `GALLICA_IIIF_BASE` (voir `harvest/gallica.py`).
 - OCR par page : endpoint `annotationpage/supplementing.json`.
 - ⚠️ **L'OCR est servi AU MOT** (une annotation W3C = un token, avec sa boîte
   `#xywh`), pas à la ligne. Le module `iiif3.group_tokens_into_lines`
@@ -87,7 +88,7 @@ Documents : `PROTOCOLE-PHASE0.md` (règle contrefactuelle, grille, procédure),
   phase 0 travaille directement sur les tokens).
 - ⚠️ Image API v3 : la taille `full` est SUPPRIMÉE, utiliser `max`
   (`.../max/0/default.jpg`). Un serveur v3 strict renvoie 400 sur `full`.
-- ⚠️ **Rate-limit** : openapi renvoie **HTTP 429** sur des rafales (~1 req/s
+- ⚠️ **Rate-limit** : l'API IIIF renvoie **HTTP 429** sur des rafales (~1 req/s
   sur 188 docs → 134 échecs). Le client a désormais un **retry/backoff**
   (respecte `Retry-After`, `max_retries=4`) et il faut lancer les gros lots
   avec `--delay 2`. Corrigé le 3 juil. 2026.
@@ -106,12 +107,12 @@ Documents : `PROTOCOLE-PHASE0.md` (règle contrefactuelle, grille, procédure),
   donc dominé par des pages sans OCR ; un inventaire ciblé sur des documents
   AVEC OCR est nécessaire pour un vrai signal (voir Prochaines étapes).
 
-### Signal qualité OCR document-level : « Taux OCR » du manifest openapi (FAIT)
+### Signal qualité OCR document-level : « Taux OCR » du manifest IIIF (FAIT)
 - `nqa_score` (OAIRecord) existe mais est **injoignable** (Datadome, voir
   ci-dessus — ni urllib, ni MCP). Route abandonnée.
-- **Trouvé mieux (3 juil. 2026)** : le manifest IIIF openapi expose un champ de
+- **Trouvé mieux (3 juil. 2026)** : le manifest IIIF de la BnF expose un champ de
   métadonnée **« Taux OCR » / « OCR rate »** (ex. `"92.79 %"`) au niveau
-  document. Servi par `openapi.bnf.fr` → **pas de Datadome, joignable sur les
+  document. Servi par l'API IIIF → **pas de Datadome, joignable sur les
   188 docs**. C'est l'équivalent atteignable du `nqa_score`.
 - Câblé dans le toolkit : `iiif3.manifest_ocr_rate()` (fraction [0,1] ou None),
   `parse_manifest()['ocr_rate']`, `GallicaClient.ocr_rate(ark)`, et une
@@ -139,8 +140,8 @@ Documents : `PROTOCOLE-PHASE0.md` (règle contrefactuelle, grille, procédure),
   par taux décroissant → base pour l'échantillonnage/scoring à l'échelle.
 
 ### Scoring à l'échelle (étape 4) — 199 pages, 3 juil. 2026
-- **Sampler réparé pour openapi** : `draw_sample` prend un `page_count_fn` et la
-  commande `sample` une option `--source openapi|legacy` (défaut openapi). Avant,
+- **Sampler réparé pour l'API IIIF** : `draw_sample` prend un `page_count_fn` et la
+  commande `sample` une option `--source iiif|legacy` (défaut iiif). Avant,
   le mode online n'utilisait que la Pagination legacy (gallica.bnf.fr, Datadome →
   mort d'ici) ; désormais les nombres de pages viennent du manifest v3. C'est ce
   qui permet **plusieurs pages par doc** hors réseau BnF.
@@ -192,7 +193,7 @@ corrélation entre `complexity` et le jugement humain, et n'extrapoler qu'ensuit
    deux lignes `page:null` identiques par doc. Corrigé : une ligne par doc en
    mode offline, page résolue au momissonnage.
 3. `full` → `max` dans les URLs d'image IIIF v3.
-4. HTTP 429 sur openapi en rafale → retry/backoff dans `GallicaClient._get`
+4. HTTP 429 sur l'API IIIF en rafale → retry/backoff dans `GallicaClient._get`
    (respecte `Retry-After`). Lancer les gros lots avec `--delay 2`.
 
 ---
@@ -202,7 +203,7 @@ corrélation entre `complexity` et le jugement humain, et n'extrapoler qu'ensuit
 1. ✅ **FAIT** — `seg-score` tourne proprement sur le pilote, colonnes
    réalistes (1–2), couverture OCR affichée.
 2. ✅ **FAIT (autrement)** — `nqa_score` injoignable (Datadome) ; remplacé par
-   le « Taux OCR » du manifest openapi via la commande `ocr-probe`. Signal
+   le « Taux OCR » du manifest IIIF via la commande `ocr-probe`. Signal
    qualité gratuit sur les 188 docs, validé croisé avec `has_ocr`.
 3. ✅ **FAIT** — `inventaire-avec-ocr.csv` produit (97 docs AVEC OCR sur 188,
    avec leur `ocr_rate`). Pour élargir : viser presse et monographies récentes
@@ -212,13 +213,13 @@ corrélation entre `complexity` et le jugement humain, et n'extrapoler qu'ensuit
    `seg-score` → `out/seg-scores-avec-ocr.csv`, synthèse par strate ci-dessus.
    190/199 pages exploitables.
 5. 🟢 **PILOTE VISION FAIT (5 juil. 2026), à confirmer à l'échelle** — calibration :
-   - **Déblocage réseau** : `openapi.bnf.fr` ajouté à l'allowlist egress de
-     l'environnement (Custom domains). Conséquence majeure : le bac à sable
-     atteint désormais openapi en direct (images IIIF + OCR + manifest), et
-     Claude peut **lire les pixels d'une page** (`curl` image → outil Read).
+   - **Déblocage réseau** : l'hôte de l'API IIIF de la BnF ajouté à l'allowlist
+     egress de l'environnement (Custom domains). Conséquence majeure : le bac à
+     sable atteint désormais l'API IIIF en direct (images IIIF + OCR + manifest),
+     et Claude peut **lire les pixels d'une page** (`curl` image → outil Read).
      L'annotation « pleine vision » ne dépend donc plus d'un humain ni du MCP.
      `gallica.bnf.fr` reste bloqué (Datadome) — sans importance, tout passe par
-     openapi. ⚠️ Garder openapi dans l'allowlist (policy relue au démarrage).
+     l'API IIIF. ⚠️ Garder cet hôte dans l'allowlist (policy relue au démarrage).
    - **Pilote 13 pages** (`sample-calib-pilot.jsonl`, 5 strates) : chaque page
      annotée à l'aveugle par un sous-agent vision (image+OCR, règle
      contrefactuelle) → `phase0-annotations-pilot.csv` ; corrélé au score

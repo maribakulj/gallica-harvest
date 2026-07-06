@@ -210,7 +210,7 @@ module séparé mais la branche *générer* du même modèle, prioritaire sur la
   (le protocole vise une pondération en caractères, non atteinte ici).
 - **Imprimés anciens avec OCR : rares pour de vrai** (~25 documents dans tous les corpus GT
   réunis) — strate structurellement mince, hors périmètre de correction de toute façon.
-- **Contraintes d'environnement** : diagnostic mené via l'API openapi.bnf.fr (IIIF, sans WC) ;
+- **Contraintes d'environnement** : diagnostic mené via l'API IIIF de la BnF (sans WC) ;
   l'ALTO natif avec WC, cible de la production, n'était pas joignable hors réseau BnF. Le
   correcteur, lui, lira l'ALTO+WC.
 - Preuve de faisabilité sur **4 pages presse/mode**, annotateur amorcé à chercher des blocs

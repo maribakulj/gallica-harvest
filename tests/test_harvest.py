@@ -109,7 +109,7 @@ def test_sampling_allocation_and_draw(tmp_path):
 
 
 def test_sampling_online_multipage_via_page_count_fn(tmp_path):
-    """With a page-count resolver (e.g. client.page_count_v3 over openapi),
+    """With a page-count resolver (e.g. client.page_count_v3 over the IIIF gateway),
     several pages are drawn per document — reproducibly, offline in the test."""
     from harvest.sampling import allocate, draw_sample, load_inventory
 

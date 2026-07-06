@@ -63,8 +63,8 @@ def main(argv=None):
     p.add_argument("--seed", type=int, default=20260702)
     p.add_argument("--offline", action="store_true",
                    help="don't resolve page counts now (page=None in manifest)")
-    p.add_argument("--source", choices=["openapi", "legacy"], default="openapi",
-                   help="openapi = page counts via IIIF v3 (défaut, hors BnF) ; "
+    p.add_argument("--source", choices=["iiif", "legacy"], default="iiif",
+                   help="iiif = page counts via IIIF v3 (défaut, hors BnF) ; "
                         "legacy = Pagination gallica.bnf.fr (réseau BnF)")
     p.add_argument("-o", "--out", default="out/sample.jsonl")
 
@@ -72,8 +72,8 @@ def main(argv=None):
     p.add_argument("manifest", help="sample.jsonl")
     p.add_argument("--dest", default="out/pages")
     p.add_argument("--images", action="store_true", help="also download page images")
-    p.add_argument("--source", choices=["openapi", "legacy"], default="openapi",
-                   help="openapi = IIIF v3 annotations (défaut, hors BnF) ; "
+    p.add_argument("--source", choices=["iiif", "legacy"], default="iiif",
+                   help="iiif = IIIF v3 annotations (défaut, hors BnF) ; "
                         "legacy = RequestDigitalElement ALTO (réseau BnF)")
 
     sub.add_parser("gt-list")
@@ -89,7 +89,7 @@ def main(argv=None):
     p = sub.add_parser("triplets")
     p.add_argument("mapping", help="JSONL from gt-arks (file, ark, page_hint), filtered/verified")
     p.add_argument("--gt-root", required=True)
-    p.add_argument("--source", choices=["openapi", "legacy"], default="openapi")
+    p.add_argument("--source", choices=["iiif", "legacy"], default="iiif")
     p.add_argument("--min-iou", type=float, default=0.30)
     p.add_argument("--min-sim", type=float, default=0.55)
     p.add_argument("-o", "--out", default="out/triplets.jsonl")
@@ -101,14 +101,14 @@ def main(argv=None):
     p.add_argument("--x-gap", type=float, default=2.5)
 
     p = sub.add_parser("seg-score",
-                       help="scorer la complexité de segmentation (sans GT) sur un sample.jsonl via OpenAPI")
+                       help="scorer la complexité de segmentation (sans GT) sur un sample.jsonl via l'API IIIF")
     p.add_argument("manifest", help="sample.jsonl (résolu: pages non nulles, sinon page f1)")
     p.add_argument("--dest", default="out/annos", help="cache des annotations téléchargées")
     p.add_argument("-o", "--out", default="out/seg-scores.csv")
     p.add_argument("--report", action="store_true", help="afficher la synthèse par strate")
 
     p = sub.add_parser("ocr-probe",
-                       help="signal OCR document-level via le 'Taux OCR' du manifest openapi (sans Datadome)")
+                       help="signal OCR document-level via le 'Taux OCR' du manifest IIIF (sans Datadome)")
     p.add_argument("inventory", help="inventaire .csv ou .jsonl (colonnes ark/doctype/period)")
     p.add_argument("-o", "--out", default="out/ocr-probe.csv")
     p.add_argument("--report", action="store_true", help="afficher la synthèse par strate")
@@ -186,10 +186,10 @@ def main(argv=None):
                     if page is None:
                         # Resolve a page on the fly via the v3 manifest.
                         import random as _random
-                        count = client.page_count_v3(ark) if args.source == "openapi" \
+                        count = client.page_count_v3(ark) if args.source == "iiif" \
                             else client.page_count(ark)
                         page = _random.Random(f"{ark}").randint(1, count)
-                    if args.source == "openapi":
+                    if args.source == "iiif":
                         out_path = client.fetch_annotations(
                             ark, page, dest / f"{ark}_f{page}.annotations.json")
                         if args.images:
@@ -256,12 +256,12 @@ def main(argv=None):
                     continue
                 gt_page = parse_any(gt_root / m["file"])
                 try:
-                    if args.source == "openapi":
+                    if args.source == "iiif":
                         from .iiif3 import group_tokens_into_lines, parse_annotation_page
                         prod_path = client.fetch_annotations(m["ark"], m["page_hint"])
                         prod_page = parse_annotation_page(
                             prod_path.read_bytes(), source_path=str(prod_path))
-                        # OpenAPI serves word-level tokens; rebuild lines.
+                        # The IIIF endpoint serves word-level tokens; rebuild lines.
                         prod_page = group_tokens_into_lines(prod_page)
                     else:
                         prod_path = client.fetch_alto(m["ark"], m["page_hint"])
@@ -449,7 +449,7 @@ def main(argv=None):
             for r in rows:
                 by[(r["doctype"], r["period"])].append(r)
             n_err = sum(1 for r in rows if r["has_ocr"] == "")
-            print("\n=== Disponibilité OCR par strate (manifest openapi) ===")
+            print("\n=== Disponibilité OCR par strate (manifest IIIF) ===")
             print(f"{'strate':<28} {'sondés':>6} {'avec OCR':>9} {'%':>6} {'taux OCR moy.':>14}")
             for (dt, per), rs in sorted(by.items()):
                 resolved = [r for r in rs if r["has_ocr"] != ""]

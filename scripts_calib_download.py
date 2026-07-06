@@ -1,6 +1,7 @@
 """Download page images + assemble OCR streams for the calibration worklist.
-Reuses annotations already cached by seg-score (out/anno-full). Images via openapi.
-Polite: small delay + 429 retry. Idempotent (skips files already present).
+Reuses annotations already cached by seg-score (out/anno-full). Images via the
+BnF IIIF Image API. Polite: small delay + 429 retry. Idempotent (skips files
+already present).
 """
 import json, csv, os, sys, time, subprocess
 from harvest.gallica import GallicaClient
@@ -25,8 +26,7 @@ c = GallicaClient()
 svc_cache = {}
 def services(ark):
     if ark not in svc_cache:
-        man = parse_manifest(json.loads(c._get(
-            f"https://openapi.bnf.fr/iiif/presentation/v3/ark:/12148/{ark}/manifest.json")))
+        man = parse_manifest(c.fetch_manifest(ark))
         svc_cache[ark] = {str(cv["index"]): cv["image_service"] for cv in man["canvases"]}
     return svc_cache[ark]
 

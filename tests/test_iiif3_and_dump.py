@@ -10,7 +10,7 @@ FIX = Path(__file__).parent / "fixtures"
 
 ANNO_PAGE = {
     "@context": "http://iiif.io/api/presentation/3/context.json",
-    "id": "https://openapi.bnf.fr/iiif/presentation/v3/ark:/12148/bpt6ktest/f3/annotationpage/supplementing.json",
+    "id": "https://iiif.example/presentation/v3/ark:/12148/bpt6ktest/f3/annotationpage/supplementing.json",
     "type": "AnnotationPage",
     "items": [
         {   # target as string with xywh fragment
@@ -49,7 +49,7 @@ MANIFEST = {
                     "body": {
                         "type": "Image",
                         "service": [{
-                            "id": "https://openapi.bnf.fr/iiif/image/v3/ark:/12148/bpt6ktest/f1",
+                            "id": "https://iiif.example/image/v3/ark:/12148/bpt6ktest/f1",
                             "type": "ImageService3",
                         }],
                     },
@@ -70,7 +70,7 @@ def test_parse_annotation_page_shapes():
 
 
 def test_annotations_align_with_page_gt():
-    """OpenAPI annotations must slot into the same alignment path as ALTO."""
+    """IIIF v3 annotations must slot into the same alignment path as ALTO."""
     prod = parse_annotation_page(json.dumps(ANNO_PAGE))
     gt = parse_any(FIX / "gt_f3.page.xml")
     res = align_pages(gt.lines, prod.lines)
@@ -90,7 +90,7 @@ def test_parse_manifest_and_crop_url():
 
 def test_manifest_ocr_rate():
     from harvest.iiif3 import manifest_ocr_rate
-    # Present: language-map metadata entry as served by openapi.bnf.fr.
+    # Present: language-map metadata entry as served by the IIIF gateway.
     with_ocr = {"type": "Manifest", "items": [], "metadata": [
         {"label": {"fr": ["Langue"], "en": ["Language"]},
          "value": {"fr": ["Français"]}},

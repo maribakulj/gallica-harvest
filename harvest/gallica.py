@@ -13,6 +13,7 @@ applied between live requests; keep it >= 1s on the public endpoints.
 from __future__ import annotations
 
 import hashlib
+import os
 import re
 import time
 import urllib.error
@@ -22,6 +23,11 @@ from pathlib import Path
 from typing import Optional
 from xml.etree import ElementTree as ET
 
+# Base host for the BnF IIIF Presentation v3 API. Configurable via the
+# GALLICA_IIIF_BASE environment variable so the concrete gateway is not
+# hard-coded; defaults to the public Gallica host.
+IIIF_V3_BASE = os.environ.get("GALLICA_IIIF_BASE", "https://gallica.bnf.fr").rstrip("/")
+
 DEFAULT_ENDPOINTS = {
     "pagination": "https://gallica.bnf.fr/services/Pagination?ark={ark_name}",
     "alto": "https://gallica.bnf.fr/RequestDigitalElement?O={ark_name}&E=ALTO&Deb={page}",
@@ -29,9 +35,10 @@ DEFAULT_ENDPOINTS = {
     # {region} is either 'full' or 'x,y,w,h' in pixel coordinates.
     "iiif_image": "https://gallica.bnf.fr/iiif/ark:/12148/{ark_name}/f{page}/{region}/{size}/0/native.jpg",
     "iiif_manifest": "https://gallica.bnf.fr/iiif/ark:/12148/{ark_name}/manifest.json",
-    # OpenAPI gateway (not bot-protected; preferred outside the BnF network).
-    "openapi_annotations": "https://openapi.bnf.fr/iiif/presentation/v3/ark:/12148/{ark_name}/f{page}/annotationpage/supplementing.json",
-    "openapi_manifest": "https://openapi.bnf.fr/iiif/presentation/v3/ark:/12148/{ark_name}/manifest.json",
+    # IIIF Presentation v3 gateway (not bot-protected; preferred outside the
+    # BnF network). Host comes from IIIF_V3_BASE above.
+    "iiif_v3_annotations": IIIF_V3_BASE + "/iiif/presentation/v3/ark:/12148/{ark_name}/f{page}/annotationpage/supplementing.json",
+    "iiif_v3_manifest": IIIF_V3_BASE + "/iiif/presentation/v3/ark:/12148/{ark_name}/manifest.json",
 }
 
 ARK_RE = re.compile(r"ark:/12148/([a-z0-9]+)", re.IGNORECASE)
@@ -75,8 +82,8 @@ class GallicaClient:
             return cached.read_bytes()
 
         req = urllib.request.Request(url, headers={"User-Agent": self.user_agent})
-        # openapi.bnf.fr rate-limits bursts with HTTP 429; back off politely and
-        # retry rather than dropping the document. Only 200s reach the cache.
+        # The IIIF gateway rate-limits bursts with HTTP 429; back off politely
+        # and retry rather than dropping the document. Only 200s reach the cache.
         for attempt in range(self.max_retries + 1):
             wait = self.delay_s - (time.monotonic() - self._last_request)
             if wait > 0:
@@ -133,12 +140,12 @@ class GallicaClient:
                 out[tag] = el.text.strip()
         return out
 
-    # -- OpenAPI (IIIF Presentation v3) --------------------------------------
+    # -- IIIF Presentation v3 ------------------------------------------------
 
     def fetch_annotations(self, ark: str, page: int,
                           dest: Optional[Path] = None) -> Path:
         """Per-page OCR text as a supplementing AnnotationPage (JSON)."""
-        url = self.endpoints["openapi_annotations"].format(
+        url = self.endpoints["iiif_v3_annotations"].format(
             ark_name=ark_name(ark), page=page)
         data = self._get(url, binary=True)
         if dest is None:
@@ -148,7 +155,7 @@ class GallicaClient:
         return dest
 
     def fetch_manifest(self, ark: str) -> bytes:
-        url = self.endpoints["openapi_manifest"].format(ark_name=ark_name(ark))
+        url = self.endpoints["iiif_v3_manifest"].format(ark_name=ark_name(ark))
         return self._get(url, binary=True)
 
     def page_count_v3(self, ark: str) -> int:
@@ -156,7 +163,7 @@ class GallicaClient:
         return parse_manifest(self.fetch_manifest(ark))["n_pages"]
 
     def ocr_rate(self, ark: str) -> Optional[float]:
-        """Document-level OCR rate in [0,1] from the openapi manifest, or None
+        """Document-level OCR rate in [0,1] from the IIIF manifest, or None
         when the document carries no production OCR. Reachable stand-in for the
         Datadome-gated OAIRecord `nqa_score`; presence also flags OCR-available.
         """

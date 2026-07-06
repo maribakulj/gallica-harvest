@@ -1,13 +1,12 @@
-"""IIIF Presentation v3 support (openapi.bnf.fr).
+"""IIIF Presentation v3 support (BnF IIIF gateway).
 
-Gallica's legacy endpoints sit behind bot protection; the OpenAPI gateway is
-the programmatic door. Two resources matter here:
+Gallica's legacy endpoints sit behind bot protection; the BnF IIIF Presentation
+v3 gateway is the programmatic door (host configured via GALLICA_IIIF_BASE in
+`gallica.py`). Two resources matter here:
 
   - the *supplementing* AnnotationPage of a canvas, which carries the OCR
-    text anchored to image regions:
-      https://openapi.bnf.fr/iiif/presentation/v3/ark:/12148/{ark}/f{n}/annotationpage/supplementing.json
-  - the manifest, for page counts and Image API service URLs:
-      https://openapi.bnf.fr/iiif/presentation/v3/ark:/12148/{ark}/manifest.json
+    text anchored to image regions;
+  - the manifest, for page counts and Image API service URLs.
 
 The annotation parser is deliberately defensive about the W3C Web Annotation
 shapes: `target` as a string with a #xywh= fragment, or as an object with a
@@ -116,8 +115,8 @@ def manifest_ocr_rate(data: bytes | str | dict) -> Optional[float]:
     """Document-level OCR rate from the manifest 'Taux OCR' / 'OCR rate'
     metadata field, as a fraction in [0,1] (e.g. '9.12 %' -> 0.0912).
 
-    Returns None when the field is absent — and on openapi.bnf.fr the field is
-    absent exactly when the document has no production OCR, so presence doubles
+    Returns None when the field is absent — and on the IIIF gateway the field
+    is absent exactly when the document has no production OCR, so presence doubles
     as an OCR-availability flag. This is the reachable stand-in for the
     OAIRecord `nqa_score` (which sits behind Datadome on gallica.bnf.fr).
     """
@@ -185,7 +184,7 @@ def group_tokens_into_lines(
 ) -> "Page":
     """Reconstruct lines from word-level annotations, purely geometrically.
 
-    The OpenAPI supplementing endpoint serves one annotation per WORD, each
+    The IIIF supplementing endpoint serves one annotation per WORD, each
     with its own xywh box. Line/block/column structure is therefore implicit
     in the geometry and must be rebuilt — crucially WITHOUT trusting the item
     order, since diagnosing reading-order errors is one goal of phase 0.
